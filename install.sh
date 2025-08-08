@@ -3,7 +3,7 @@ set -euo pipefail
 # Update repo and repository after initial build
 sudo apt update && sudo apt upgrade -y
 # Install some apt apps
-sudo apt install nextcloud-client caffeine virt-manager transmission nfs-common net-tools neovim flameshot rustc cargo git nmap wireshark sshfs snap ruby-full bundler rake -y
+sudo apt install nextcloud-client caffeine neovim virt-manager transmission nfs-common net-tools neovim flameshot rustc cargo git nmap wireshark sshfs snap ruby-full bundler rake -y
 # Install Brave Browser
 curl -fsS https://dl.brave.com/install.sh | sudo bash
 # Install ProtonVPN
@@ -18,7 +18,6 @@ sudo apt install steam -y
 echo 'deb http://download.opensuse.org/repositories/home:/clayrisser:/bookworm/Debian_12/ /' | sudo tee /etc/apt/sources.list.d/home:clayrisser:bookworm.list
 curl -fsSL https://download.opensuse.org/repositories/home:clayrisser:bookworm/Debian_12/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_clayrisser_bookworm.gpg >/dev/null
 sudo apt update
-sudo apt install ghostty -y
 # Install Signal-Desktop
 wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor >signal-desktop-keyring.gpg
 cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg >/dev/null
@@ -30,19 +29,27 @@ gem install debug
 # Mount Network Drive
 sudo mkdir /mnt/knox/
 sudo mount -t nfs 192.168.114.240:/mnt/Knox/media /mnt/knox/
+# Install snap
+sudo apt install snapd
 # Snap Install
-sudo snap install ghostty obsidian
+sudo snap install ghostty --classic 
+sudo snap install obsidian --classic
+# Install starship
+curl -sS https://starship.rs/install.sh | sh
 # Get .dotfiles
 mkdir -p ~/dev && cd ~/dev
-git clone https://github.com/obitheway/nvim.git
-git clone https://github.com/obitheway/obsidian.git
-git clone https://github.com/obitheway/ghostty.git
-git clone https://github.com/obitheway/bash.git
-git clone https://github.com/obitheway/aura-dark.git
-rm -rf ~/.config/nvim
+git clone git@github.com:obitheway/nvim.git
+git clone git@github.com:obitheway/obsidian.git
+git clone git@github.com:obitheway/ghostty.git
+git clone git@github.com:obitheway/bash.git
+git clone git@github.com:obitheway/aura-dark.git
+mv ~/nvim ~/dev/
+mv ~/ghostty ~/dev
+mv ~/bash ~/dev
+lrm -rf ~/.config/nvim
 cp -r ~/dev/nvim ~/.config/
-cp -r ~/dev/obsidian ~
 rm -rf ~/.config/ghostty/
 cp -r ~/dev/ghostty ~/.config
 cp -r ~/dev/bash/.bashrc ~
-cp -r ~/dev/aura-dark ~
+source ~/.bashrc
+
